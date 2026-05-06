@@ -195,14 +195,17 @@ Multiple Backend Integrations
 
 End-to-end recipe: **PPO + MlpPolicy** on `PandaPickCube-v0` (state), save **FSDP full weights** at the last training step, then render an **evaluation MP4** headlessly with the same action mapping as training.
 
+**Preview (GitHub does not embed MP4 in README — click the image or link to play in-browser or download):**
+
 <p align="center">
-  <video src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4" controls muted playsinline width="720"></video><br/>
-  <sub>Rollout recording (1280×720, 8 episodes) after PPO training; uses the same <code>prepare_actions_for_mujoco</code> mapping as RLinf FrankaSim workers.</sub>
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">
+    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo_poster.jpg" alt="FrankaSim PandaPickCube rollout demo — click to open MP4" width="720">
+  </a><br/>
+  <sub>Rollout (1280×720, 8 episodes) after PPO; same <code>prepare_actions_for_mujoco</code> mapping as RLinf FrankaSim workers. Video file in repo: <code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code> (not under <code>logs/</code>, which is local-only).</sub>
 </p>
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">Direct link (MP4)</a>
-  · Local path: <code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code>
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">Open / download MP4</a>
 </p>
 
 - **Prerequisites:** [Franka-Sim](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html) (`franka_sim`), Ray, MuJoCo; for headless video set `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.
