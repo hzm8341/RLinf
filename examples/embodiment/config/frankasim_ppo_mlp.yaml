@@ -32,6 +32,9 @@ runner:
   only_eval: False
   val_check_interval: 50
   save_interval: -1
+  # When save_interval < 0, still write a checkpoint at the last training step
+  # (needed for offline eval / MP4 rollout scripts).
+  save_ckpt_at_train_end: true
 
   seq_length: 1
   max_prompt_length: 1
@@ -119,7 +122,8 @@ rollout:
     model_path: ""
     precision: ${actor.model.precision}
 
-  enable_torch_compile: True
+  # torch.compile + inductor autotune can be very RAM/GPU-heavy on smaller desktops.
+  enable_torch_compile: False
   enable_cuda_graph: False
 actor:
   group_name: ActorGroup

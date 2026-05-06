@@ -29,6 +29,7 @@ RLinf 是一个灵活且可扩展的开源框架，专为具身智能和智能�
 </div>
 
 ## 最新动态
+- [2026/05] 🎬 **演示：** FrankaSim **PandaPickCube** 上使用 PPO + MLP 训练、在最后一 step 保存检查点、并导出 **高清 MP4** 评测视频，见下文 [Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube)。
 - [2026/04] 🔥 RLinf 支持 Dexmal DOS-W1 用于真机强化学习。文档：[Dexmal DOS-W1 真机强化学习](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/dosw1.html)。
 - [2026/04] 🔥 RLinf 支持 RECAP（RL with Experience and Corrections via Advantage-conditioned Policies）离线优势条件策略优化。文档：[RECAP](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/recap.html)。
 - [2026/04] 🔥 RLinf 现已支持基于D4RL基准的离线 IQL 训练。文档：[D4RL 上的 IQL](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/iql_d4rl.html)，论文：[Offline Reinforcement Learning with Implicit Q-Learning](https://arxiv.org/abs/2110.06169)。
@@ -183,6 +184,27 @@ RLinf具有高度灵活性，可支持多种强化学习训练工作流（PPO、
     </tr>
   </tbody>
 </table>
+
+### Demo: FrankaSim PandaPickCube
+
+全流程：**PPO + MlpPolicy** 在 `PandaPickCube-v0`（状态输入）上训练；在最后一个训练 step 写入 **FSDP `full_weights.pt`**；再用与训练一致的 **`prepare_actions_for_mujoco` 动作映射**（8 维策略时取 `0:3` 为末端位移、索引 `6` 为夹爪）离线渲染 **无头 MP4**。
+
+- **环境：** 见 [Franka-Sim](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/frankasim.html)（`franka_sim`）、Ray、MuJoCo；无头录屏建议 `MUJOCO_GL=egl`、`PYOPENGL_PLATFORM=egl`。
+- **配置：** `examples/embodiment/config/frankasim_ppo_mlp.yaml`。在 `runner.save_interval: -1` 时开启 `runner.save_ckpt_at_train_end: true`，可在训练结束时保存 `checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt`。
+- **导出 MP4**（默认离屏分辨率 **1280×720**）：
+
+```bash
+export EMBODIED_PATH=examples/embodiment/config
+export PYTHONPATH=$PWD MUJOCO_GL=egl PYOPENGL_PLATFORM=egl
+python examples/embodiment/train_embodied_agent.py --config-path examples/embodiment/config --config-name frankasim_ppo_mlp
+
+python examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py \
+  --ckpt path/to/checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt \
+  --out frankasim_pandapickcube_rollout.mp4 \
+  --episodes 8 --width 1280 --height 720
+```
+
+可选脚本：`examples/embodiment/run_frankasim_pickcube_eval_video.sh`（检查点→MP4）、`examples/embodiment/run_franka_pickcube_resume_to_mp4.sh`（断点续训并导出 MP4）。
 
 <table style="width: 100%; table-layout: auto; border-collapse: collapse;">
   <thead align="center" valign="bottom">

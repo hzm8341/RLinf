@@ -330,6 +330,9 @@ class EmbodiedRunner:
                     self.cfg.runner.save_interval,
                     1.0,
                     run_time_exceeded=False,
+                    save_ckpt_at_train_end=self.cfg.runner.get(
+                        "save_ckpt_at_train_end", False
+                    ),
                 )
 
                 eval_metrics = {}

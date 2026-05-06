@@ -35,9 +35,10 @@ def check_progress(
     save_interval: int,
     limit_val_batches: Union[int, float, None],
     run_time_exceeded: bool = False,
+    save_ckpt_at_train_end: bool = False,
 ):
     is_validation_enabled = limit_val_batches != 0 and val_check_interval > 0
-    is_save_enabled = save_interval > 0
+    is_save_interval_enabled = save_interval > 0
     is_train_end = step == max_steps
 
     if is_validation_enabled:
@@ -52,13 +53,17 @@ def check_progress(
     )
     run_val &= is_validation_enabled
 
-    # save model at save intervals or last step
-    save_model = (
-        safe_is_divisible(step, save_interval) or is_train_end or run_time_exceeded
-    )
-    # sometimes the user will provide a validation metric
-    # to save against, so we need to run val when we save
-    save_model &= is_save_enabled
+    # save model at save intervals (when save_interval > 0) or when explicitly
+    # requested at training end / time limit (save_ckpt_at_train_end).
+    save_model = False
+    if is_save_interval_enabled:
+        save_model = (
+            safe_is_divisible(step, save_interval)
+            or is_train_end
+            or run_time_exceeded
+        )
+    if save_ckpt_at_train_end and (is_train_end or run_time_exceeded):
+        save_model = True
 
     return run_val, save_model, is_train_end
 

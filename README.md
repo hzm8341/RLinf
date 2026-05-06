@@ -30,6 +30,7 @@ RLinf is a flexible and scalable open-source RL infrastructure designed for Embo
 
 
 ## What's NEW!
+- [2026/05] 🎬 **Demo:** FrankaSim **PandaPickCube** PPO (MLP) training, end-of-run checkpoint save, and **HD MP4** rollout — see [Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube) below.
 - [2026/04] 🔥 RLinf supports Dexmal DOS-W1 for real-world reinforcement learning. Doc: [Real-World RL on Dexmal DOS-W1](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/dosw1.html).
 - [2026/04] 🔥 RLinf supports RECAP (RL with Experience and Corrections via Advantage-conditioned Policies) for offline advantage-based policy optimization. Doc: [RECAP](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/recap.html).
 - [2026/04] 🔥 RLinf now supports offline IQL training on D4RL benchmarks. Doc: [IQL on D4RL](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/iql_d4rl.html), paper: [Offline Reinforcement Learning with Implicit Q-Learning](https://arxiv.org/abs/2110.06169).
@@ -187,6 +188,28 @@ Multiple Backend Integrations
     </tr>
   </tbody>
 </table>
+
+### Demo: FrankaSim PandaPickCube
+
+End-to-end recipe: **PPO + MlpPolicy** on `PandaPickCube-v0` (state), save **FSDP full weights** at the last training step, then render an **evaluation MP4** headlessly with the same action mapping as training.
+
+- **Prerequisites:** [Franka-Sim](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html) (`franka_sim`), Ray, MuJoCo; for headless video set `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.
+- **Config:** `examples/embodiment/config/frankasim_ppo_mlp.yaml`. With `runner.save_interval: -1`, enable `runner.save_ckpt_at_train_end: true` so `checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt` is written on the final step.
+- **Policy → environment actions:** For 8-D policy outputs, FrankaSim uses `prepare_actions_for_mujoco` (xyz from indices `0:3`, gripper from index `6`). The offline script applies the same mapping so the video matches training behavior.
+- **Encode MP4** (default render **1280×720**):
+
+```bash
+export EMBODIED_PATH=examples/embodiment/config
+export PYTHONPATH=$PWD MUJOCO_GL=egl PYOPENGL_PLATFORM=egl
+python examples/embodiment/train_embodied_agent.py --config-path examples/embodiment/config --config-name frankasim_ppo_mlp
+
+python examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py \
+  --ckpt path/to/checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt \
+  --out frankasim_pandapickcube_rollout.mp4 \
+  --episodes 8 --width 1280 --height 720
+```
+
+Helper scripts (optional): `examples/embodiment/run_frankasim_pickcube_eval_video.sh` (checkpoint → MP4), `examples/embodiment/run_franka_pickcube_resume_to_mp4.sh` (resume training then MP4).
 
 <table style="width: 100%; table-layout: auto; border-collapse: collapse;">
   <thead align="center" valign="bottom">
