@@ -193,6 +193,16 @@ Multiple Backend Integrations
 
 End-to-end recipe: **PPO + MlpPolicy** on `PandaPickCube-v0` (state), save **FSDP full weights** at the last training step, then render an **evaluation MP4** headlessly with the same action mapping as training.
 
+<p align="center">
+  <video src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4" controls muted playsinline width="720"></video><br/>
+  <sub>Rollout recording (1280×720, 8 episodes) after PPO training; uses the same <code>prepare_actions_for_mujoco</code> mapping as RLinf FrankaSim workers.</sub>
+</p>
+
+<p align="center">
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">Direct link (MP4)</a>
+  · Local path: <code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code>
+</p>
+
 - **Prerequisites:** [Franka-Sim](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html) (`franka_sim`), Ray, MuJoCo; for headless video set `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.
 - **Config:** `examples/embodiment/config/frankasim_ppo_mlp.yaml`. With `runner.save_interval: -1`, enable `runner.save_ckpt_at_train_end: true` so `checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt` is written on the final step.
 - **Policy → environment actions:** For 8-D policy outputs, FrankaSim uses `prepare_actions_for_mujoco` (xyz from indices `0:3`, gripper from index `6`). The offline script applies the same mapping so the video matches training behavior.
@@ -210,6 +220,8 @@ python examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py \
 ```
 
 Helper scripts (optional): `examples/embodiment/run_frankasim_pickcube_eval_video.sh` (checkpoint → MP4), `examples/embodiment/run_franka_pickcube_resume_to_mp4.sh` (resume training then MP4).
+
+- **Git — push to fork via SSH:** `git remote set-url hzm8341 git@github.com:hzm8341/RLinf.git` then `git push hzm8341 main` (requires [SSH keys on GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)).
 
 <table style="width: 100%; table-layout: auto; border-collapse: collapse;">
   <thead align="center" valign="bottom">

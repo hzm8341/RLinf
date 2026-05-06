@@ -189,6 +189,16 @@ RLinf具有高度灵活性，可支持多种强化学习训练工作流（PPO、
 
 全流程：**PPO + MlpPolicy** 在 `PandaPickCube-v0`（状态输入）上训练；在最后一个训练 step 写入 **FSDP `full_weights.pt`**；再用与训练一致的 **`prepare_actions_for_mujoco` 动作映射**（8 维策略时取 `0:3` 为末端位移、索引 `6` 为夹爪）离线渲染 **无头 MP4**。
 
+<p align="center">
+  <video src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4" controls muted playsinline width="720"></video><br/>
+  <sub>评测录像（1280×720，8 条轨迹）；与 FrankaSim 环境中使用的 <code>prepare_actions_for_mujoco</code> 动作映射一致。</sub>
+</p>
+
+<p align="center">
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">直接下载 MP4</a>
+  · 仓库内路径：<code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code>
+</p>
+
 - **环境：** 见 [Franka-Sim](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/frankasim.html)（`franka_sim`）、Ray、MuJoCo；无头录屏建议 `MUJOCO_GL=egl`、`PYOPENGL_PLATFORM=egl`。
 - **配置：** `examples/embodiment/config/frankasim_ppo_mlp.yaml`。在 `runner.save_interval: -1` 时开启 `runner.save_ckpt_at_train_end: true`，可在训练结束时保存 `checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt`。
 - **导出 MP4**（默认离屏分辨率 **1280×720**）：
@@ -205,6 +215,8 @@ python examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py \
 ```
 
 可选脚本：`examples/embodiment/run_frankasim_pickcube_eval_video.sh`（检查点→MP4）、`examples/embodiment/run_franka_pickcube_resume_to_mp4.sh`（断点续训并导出 MP4）。
+
+- **Git — 使用 SSH 推送到 fork：** `git remote set-url hzm8341 git@github.com:hzm8341/RLinf.git` 后执行 `git push hzm8341 main`（需已在 GitHub [配置 SSH 密钥](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)）。
 
 <table style="width: 100%; table-layout: auto; border-collapse: collapse;">
   <thead align="center" valign="bottom">
