@@ -195,17 +195,19 @@ Multiple Backend Integrations
 
 End-to-end recipe: **PPO + MlpPolicy** on `PandaPickCube-v0` (state), save **FSDP full weights** at the last training step, then render an **evaluation MP4** headlessly with the same action mapping as training.
 
-**Preview (GitHub does not embed MP4 in README — click the image or link to play in-browser or download):**
+**Preview:** README cannot embed a video player. **Click the image or “Watch on GitHub”** to open the file page — GitHub plays MP4 in the browser there. This file is committed at `examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4` (same content as a typical `logs/.../franka_pickcube_full_rollout.mp4` export).
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">
-    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo_poster.jpg" alt="FrankaSim PandaPickCube rollout demo — click to open MP4" width="720">
+  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
+    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — click to watch on GitHub" width="720">
   </a><br/>
-  <sub>Rollout (1280×720, 8 episodes) after PPO; same <code>prepare_actions_for_mujoco</code> mapping as RLinf FrankaSim workers. Video file in repo: <code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code> (not under <code>logs/</code>, which is local-only).</sub>
+  <sub>1280×720 rollout (8 episodes); <code>prepare_actions_for_mujoco</code> action mapping aligned with FrankaSim training.</sub>
 </p>
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">Open / download MP4</a>
+  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>Watch on GitHub</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">Direct raw MP4</a>
 </p>
 
 - **Prerequisites:** [Franka-Sim](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html) (`franka_sim`), Ray, MuJoCo; for headless video set `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.

@@ -191,17 +191,19 @@ RLinf具有高度灵活性，可支持多种强化学习训练工作流（PPO、
 
 全流程：**PPO + MlpPolicy** 在 `PandaPickCube-v0`（状态输入）上训练；在最后一个训练 step 写入 **FSDP `full_weights.pt`**；再用与训练一致的 **`prepare_actions_for_mujoco` 动作映射**（8 维策略时取 `0:3` 为末端位移、索引 `6` 为夹爪）离线渲染 **无头 MP4**。
 
-**预览：** GitHub 网页版 **不会在 README 里内嵌播放 MP4**（会过滤 `<video>` 标签）。请**点击图片或下方链接**在浏览器中打开/下载视频。
+**预览：** README 正文里无法嵌入播放器。**点击封面图或「在 GitHub 上观看」** 会进入仓库里的 MP4 **文件页**，GitHub 会在该页**内嵌播放**视频。本演示文件路径：`examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4`（由本地 `logs/.../franka_pickcube_full_rollout.mp4` 拷贝并入库）。
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">
-    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo_poster.jpg" alt="FrankaSim PandaPickCube 演示 — 点击打开 MP4" width="720">
+  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
+    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — 点击在 GitHub 上播放" width="720">
   </a><br/>
-  <sub>录像为 1280×720、8 条轨迹；与 FrankaSim 中 <code>prepare_actions_for_mujoco</code> 一致。仓库内视频路径：<code>examples/embodiment/assets/frankasim_pandapickcube_demo.mp4</code>。本地 <code>logs/…</code> 下的文件若未 <code>git add</code>，网页端不可见。</sub>
+  <sub>1280×720，8 条轨迹；动作映射与训练一致（<code>prepare_actions_for_mujoco</code>）。</sub>
 </p>
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_demo.mp4">打开 / 下载 MP4</a>
+  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>在 GitHub 上观看</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">直链下载 MP4</a>
 </p>
 
 - **环境：** 见 [Franka-Sim](https://rlinf.readthedocs.io/zh-cn/latest/rst_source/examples/embodied/frankasim.html)（`franka_sim`）、Ray、MuJoCo；无头录屏建议 `MUJOCO_GL=egl`、`PYOPENGL_PLATFORM=egl`。
