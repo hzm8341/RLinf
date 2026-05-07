@@ -236,19 +236,19 @@ Checkpoint 通常为：`…/checkpoints/global_step_<N>/actor/model_state_dict/f
 
 ### Demo: FrankaSim PandaPickCube
 
-**预览：** README 正文里无法嵌入播放器。**点击下图或「在 GitHub 上观看」** 进入仓库 MP4 **文件页**，GitHub 会在该页内嵌播放；文件路径：`examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4`。
+**预览：** README 无法在正文里可靠内嵌播放器。**点击下图或「在 GitHub 上观看」** 打开 **当前浏览器里这个仓库 / 分支** 下的 MP4 文件页（链接为 `./examples/embodiment/...`）。若在官方 [`RLinf/RLinf`](https://github.com/RLinf/RLinf) 首页看到封面或链接 **404**，说明上游 `main` 尚未包含该素材；请到 **你已推送这两个文件的 fork** 主页再打开 README（例如本仓库若为个人 fork）。
 
 <p align="center">
-  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
-    <img src="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — 点击在 GitHub 上播放" width="720">
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
+    <img src="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — 点击在 GitHub 上播放" width="720">
   </a><br/>
   <sub>1280×720，8 条轨迹；动作映射与训练一致（<code>prepare_actions_for_mujoco</code>）。</sub>
 </p>
 
 <p align="center">
-  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>在 GitHub 上观看</b></a>
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>在 GitHub 上观看</b></a>
   &nbsp;·&nbsp;
-  <a href="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">直链下载 MP4</a>
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">打开视频文件页（可下载）</a>
 </p>
 
 训练流程见上文 **「FrankaSim 抓取训练复现（仿真）」**。

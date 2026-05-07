@@ -240,19 +240,19 @@ See **[Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube)** below for
 
 ### Demo: FrankaSim PandaPickCube
 
-**Preview:** README cannot embed a video player. **Click the image or “Watch on GitHub”** to open the file page — GitHub plays MP4 in the browser there. The asset is committed as `examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4`.
+**Preview:** README cannot embed an in-frame video player reliably. **Click the image or “Watch on GitHub”** — it opens the MP4 **blob** page for the **repo and branch you are viewing** (relative links `./examples/embodiment/...`). If you see a **404** on the official [`RLinf/RLinf`](https://github.com/RLinf/RLinf) site, those media files are not on `main` there yet; open the same README on **a fork where you (or the author) committed** `frankasim_pandapickcube_rollout_full.mp4` and `frankasim_pandapickcube_rollout_full_poster.jpg`.
 
 <p align="center">
-  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
-    <img src="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — click to watch on GitHub" width="720">
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
+    <img src="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — click to watch on GitHub" width="720">
   </a><br/>
   <sub>1280×720 rollout (8 episodes); <code>prepare_actions_for_mujoco</code> action mapping aligned with FrankaSim training.</sub>
 </p>
 
 <p align="center">
-  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>Watch on GitHub</b></a>
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>Watch on GitHub</b></a>
   &nbsp;·&nbsp;
-  <a href="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">Direct raw MP4</a>
+  <a href="./examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">Open MP4 page (playback or download)</a>
 </p>
 
 Training is covered in **[Reproducing Franka grasping (FrankaSim simulation)](#reproducing-franka-grasping-frankasim-simulation)** above.
