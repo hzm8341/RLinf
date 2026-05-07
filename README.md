@@ -30,7 +30,7 @@ RLinf is a flexible and scalable open-source RL infrastructure designed for Embo
 
 
 ## What's NEW!
-- [2026/05] 🎬 **Demo:** FrankaSim **PandaPickCube** PPO (MLP) training, end-of-run checkpoint save, and **HD MP4** rollout — see [Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube) below.
+- [2026/05] 🎬 **FrankaSim:** step-by-step [Franka grasping reproduction (sim)](#reproducing-franka-grasping-frankasim-simulation); **demo** rollout video and MP4 encode: [Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube).
 - [2026/05] 🔥 RLinf supports GimArm. Doc: [GimArm](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/gim_arm.html)
 - [2026/05] 🔥 RLinf supports DM0. In particular, RLinf and Dexbotic enable Lego-style SFT-RL integration. Link: [Dexbotic project link](https://github.com/dexmal/dexbotic/blob/main/docs/RLinfAsRLBackend.md)
 - [2026/04] 🔥 RLinf supports Dexmal DOS-W1 for real-world reinforcement learning. Doc: [Real-World RL on Dexmal DOS-W1](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/dosw1.html).
@@ -191,44 +191,81 @@ Multiple Backend Integrations
   </tbody>
 </table>
 
+### Reproducing Franka grasping (FrankaSim simulation)
+
+These steps train a **simulated Franka Panda** pick-and-place task (MuJoCo **Franka-Sim** via `franka_sim`: `PandaPickCube-v0` for proprioceptive state, `PandaPickCubeVision-v0` when using images). This is **not** real hardware; for physical Franka see [RL on Franka in the RealWorld](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/franka.html).
+
+**1. Dependencies**
+
+Install RLinf embodied stack with the Franka-Sim environment:
+
+```bash
+cd /path/to/RLinf
+bash requirements/install.sh embodied --model openvla --env frankasim
+```
+
+Optional Docker image: [`agentic-rlinf0.2-frankasim`](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html). For headless rendering / MP4 rollout, export `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`. Single-machine runs assume `cluster.num_nodes: 1` and Ray is available (`ray start --head` or your usual setup).
+
+Full narrative and troubleshooting: **[Franka-Sim example doc](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html)**.
+
+**2. Start training**
+
+| Goal | Entry | Backend config |
+|------|-------|----------------|
+| **Default reproducible path** (state obs, PPO + MLP) | `bash examples/embodiment/run_frankasim_pickcube_oneclick.sh` | `frankasim_ppo_mlp.yaml` → `env/frankasim_pickcube_state.yaml` |
+| Same (manual Hydra entry) | `bash examples/embodiment/run_embodiment.sh frankasim_ppo_mlp` | same |
+| Vision + async SAC + CNN | `bash examples/embodiment/run_frankasim_pickcube_oneclick.sh --mode vision` | `frankasim_sac_cnn_async.yaml` → `env/frankasim_pickcube_vision.yaml` |
+
+Common **one-click** overrides (see `--help`): `--train-total-num-envs 128`, `--mode vision`, `--max-steps …`, `--dry-run`.
+
+**3. Key files**
+
+- `examples/embodiment/config/frankasim_ppo_mlp.yaml` — PPO actor–critic, MLP policy on `PandaPickCube-v0`.
+- `examples/embodiment/config/frankasim_sac_cnn_async.yaml` — vision SAC + CNN pipeline.
+- `examples/embodiment/config/env/frankasim_pickcube_state.yaml` / `frankasim_pickcube_vision.yaml` — environment wiring.
+
+Hydra overrides (optional):  
+
+`python examples/embodiment/train_embodied_agent.py --config-path examples/embodiment/config/ --config-name frankasim_ppo_mlp runner.logger.log_path=./logs/my_frankasim_run`
+
+**4. Checkpoints & video**
+
+Checkpoint path shape: `…/checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt`. For `runner.save_interval: -1`, set `runner.save_ckpt_at_train_end: true` in the PPO recipe so weights exist at train end.
+
+Helper scripts: `examples/embodiment/run_frankasim_pickcube_eval_video.sh`, `examples/embodiment/run_franka_pickcube_resume_to_mp4.sh`, Python rollout: `examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py`. **Offline evaluation:** 8‑D policies use `prepare_actions_for_mujoco` (dims `0:3` translation, index `6` gripper) so rollout matches training.
+
+See **[Demo: FrankaSim PandaPickCube](#demo-frankasim-pandapickcube)** below for a sample rollout video and encode command.
+
+---
+
 ### Demo: FrankaSim PandaPickCube
 
-End-to-end recipe: **PPO + MlpPolicy** on `PandaPickCube-v0` (state), save **FSDP full weights** at the last training step, then render an **evaluation MP4** headlessly with the same action mapping as training.
-
-**Preview:** README cannot embed a video player. **Click the image or “Watch on GitHub”** to open the file page — GitHub plays MP4 in the browser there. This file is committed at `examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4` (same content as a typical `logs/.../franka_pickcube_full_rollout.mp4` export).
+**Preview:** README cannot embed a video player. **Click the image or “Watch on GitHub”** to open the file page — GitHub plays MP4 in the browser there. The asset is committed as `examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4`.
 
 <p align="center">
-  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
-    <img src="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — click to watch on GitHub" width="720">
+  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">
+    <img src="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full_poster.jpg" alt="FrankaSim PandaPickCube — click to watch on GitHub" width="720">
   </a><br/>
   <sub>1280×720 rollout (8 episodes); <code>prepare_actions_for_mujoco</code> action mapping aligned with FrankaSim training.</sub>
 </p>
 
 <p align="center">
-  <a href="https://github.com/hzm8341/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>Watch on GitHub</b></a>
+  <a href="https://github.com/RLinf/RLinf/blob/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4"><b>Watch on GitHub</b></a>
   &nbsp;·&nbsp;
-  <a href="https://raw.githubusercontent.com/hzm8341/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">Direct raw MP4</a>
+  <a href="https://raw.githubusercontent.com/RLinf/RLinf/main/examples/embodiment/assets/frankasim_pandapickcube_rollout_full.mp4">Direct raw MP4</a>
 </p>
 
-- **Prerequisites:** [Franka-Sim](https://rlinf.readthedocs.io/en/latest/rst_source/examples/embodied/frankasim.html) (`franka_sim`), Ray, MuJoCo; for headless video set `MUJOCO_GL=egl` and `PYOPENGL_PLATFORM=egl`.
-- **Config:** `examples/embodiment/config/frankasim_ppo_mlp.yaml`. With `runner.save_interval: -1`, enable `runner.save_ckpt_at_train_end: true` so `checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt` is written on the final step.
-- **Policy → environment actions:** For 8-D policy outputs, FrankaSim uses `prepare_actions_for_mujoco` (xyz from indices `0:3`, gripper from index `6`). The offline script applies the same mapping so the video matches training behavior.
-- **Encode MP4** (default render **1280×720**):
+Training is covered in **[Reproducing Franka grasping (FrankaSim simulation)](#reproducing-franka-grasping-frankasim-simulation)** above.
+
+Encode an evaluation **MP4** at **1280×720** after you have `full_weights.pt`:
 
 ```bash
-export EMBODIED_PATH=examples/embodiment/config
 export PYTHONPATH=$PWD MUJOCO_GL=egl PYOPENGL_PLATFORM=egl
-python examples/embodiment/train_embodied_agent.py --config-path examples/embodiment/config --config-name frankasim_ppo_mlp
-
 python examples/embodiment/scripts/frankasim_pickcube_rollout_mp4.py \
   --ckpt path/to/checkpoints/global_step_<N>/actor/model_state_dict/full_weights.pt \
   --out frankasim_pandapickcube_rollout.mp4 \
   --episodes 8 --width 1280 --height 720
 ```
-
-Helper scripts (optional): `examples/embodiment/run_frankasim_pickcube_eval_video.sh` (checkpoint → MP4), `examples/embodiment/run_franka_pickcube_resume_to_mp4.sh` (resume training then MP4).
-
-- **Git — push to fork via SSH:** `git remote set-url hzm8341 git@github.com:hzm8341/RLinf.git` then `git push hzm8341 main` (requires [SSH keys on GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)).
 
 <table style="width: 100%; table-layout: auto; border-collapse: collapse;">
   <thead align="center" valign="bottom">
